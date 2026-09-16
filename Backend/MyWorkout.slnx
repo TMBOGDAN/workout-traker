@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="../Frontend/MyWorkout/MyWorkout.csproj" />
   <Project Path="MyWorkout.Api/MyWorkout.Api.csproj" />
   <Project Path="MyWorkout.Application/MyWorkout.Application.csproj" />
   <Project Path="MyWorkout.Domain/MyWorkout.Domain.csproj" />

@@ -1,14 +1,19 @@
+
+using MyWorkout.Domain.Entities;
+
 namespace Services
 {
 
     class WorkoutServices
     {
         // Implementation of workout services goes here
-        void CreateWorkout(string name, string description, int duration)
+        Workout CreateWorkout(string name, string description, int duration)
         {
             // Logic to create a new workout
-            Workout newWorkout = new Workout(name, description, duration);
-            // Save newWorkout to the database or perform other actions
+            Workout newWorkout = new(name, []);
+
+
+            return newWorkout;
         }
 
         void UpdateWorkout(int workoutId, string name, string description, int duration)

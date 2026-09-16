@@ -1,3 +1,6 @@
+using MyWorkout.Domain.Entities;
+using MyWorkout.Domain.Enums;
+
 namespace Services
 {
     public class UserServices
