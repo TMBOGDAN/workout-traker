@@ -7,7 +7,7 @@
     Title="MyWorkout">
 
     <ShellContent
-        Title="Home"
+        Title="MyWorkout"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
 

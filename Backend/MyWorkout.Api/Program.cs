@@ -16,6 +16,9 @@ builder.Services.AddDbContext<MyWorkoutDbContext>(options =>
 
 var app = builder.Build();
 
+app.MapControllers();
+
+
 app.MapGet("/", () => "Hello World!");
 
 app.Run();
