@@ -1,0 +1,14 @@
+@baseUrl = http://localhost:5005
+
+### Get all workouts
+GET {{baseUrl}}/api/workout
+Accept: application/json
+
+###
+GET {{baseUrl}}/api/workout/1
+Accept: application/json
+
+###
+
+GET {{baseUrl}}
+Accept: application/json

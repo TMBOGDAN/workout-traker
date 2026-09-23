@@ -22,3 +22,7 @@ appsettings.*.Local.json
 
 # Obsolete project folder kept locally because it is locked by the IDE
 Backend/MyWorkput.api/
+
+# React / Vite build output
+**/node_modules/
+**/dist/

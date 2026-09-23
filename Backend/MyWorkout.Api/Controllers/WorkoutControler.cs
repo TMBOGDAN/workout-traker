@@ -14,18 +14,28 @@ public class WorkoutController : ControllerBase
         _dbContext = dbContext;
     }
 
+    List<string> exercies = new List<string>
+    {
+        "Squat",
+        "Bench Press",
+        "Deadlift",
+        "Pull-up"
+    };
+
 
     [HttpGet]
-    public IActionResult SayHello()
+    public IActionResult GetExercises()
     {
-        return Ok("Hello from WorkoutController!");
+        return Ok(exercies);
     }
 
-    [HttpGet]
-    public IActionResult GetWorkouts()
+    [HttpGet("{id:int}")]
+    public IActionResult GetWorkouts(int id)
     {
-        return Ok("Lista antrenamentelor");
+
+        return Ok(exercies[id]);
     }
+
 
 
 }

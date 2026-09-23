@@ -1,6 +1,6 @@
 Backend/
 │
-├── MyWorkout.slnx
+├── MyWorkout.sln
 │
 ├── MyWorkout.Api/
 │ ├── Controllers/ sau Endpoints/
