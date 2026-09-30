@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MyWorkout.Infrastructure.Persistence;
+using MyWorkout.Infrastructure.Services;
 
 
 
@@ -23,6 +24,8 @@ builder.Services.AddDbContext<MyWorkoutDbContext>(options =>
 {
     options.UseSqlite(connectionString);
 });
+
+builder.Services.AddScoped<WorkoutServices>();
 
 var app = builder.Build();
 app.UseCors("Frontend");
