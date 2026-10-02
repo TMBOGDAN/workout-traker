@@ -24,4 +24,12 @@ public class User
         PasswordHash = password;
         Rol = rol;
     }
+
+    public User(User user_p)
+    {
+        this.Email = user_p.Email;
+        this.Name = user_p.Name;
+        this.PasswordHash = user_p.PasswordHash;
+        this.Rol = user_p.Rol;
+    }
 }

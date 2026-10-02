@@ -32,16 +32,25 @@ namespace MyWorkout.Infrastructure.Services
             return newUser;
         }
 
-        public async Task<bool> UpdateUser(UserDto user_p)
+        public async Task<bool> UpdateUser(User user_p)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(w => w.Email == user_p.Email);
-
+            user = new User(user_p);
+            await _dbContext.SaveChangesAsync();
             return true;
         }
 
-        void DeleteUser(UserDto user_p)
+        async Task<bool> DeleteUser(User user_p)
         {
+            var user = await _dbContext.Users.FirstOrDefaultAsync(w => w.Id == user_p.Id);
+            if (user is null)
+            {
+                return false;
+            }
+            _dbContext.Users.Remove(user);
+            await _dbContext.SaveChangesAsync();
 
+            return true;
         }
     }
 
