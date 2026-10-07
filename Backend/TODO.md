@@ -4,22 +4,14 @@ Lista este ordonată după prioritate și dependențe. Nu începe etapa următoa
 
 ## P0 - Repararea modelelor și a migrațiilor EF Core
 
-- [x] Redenumește `Excercise` în `Exercise` în Domain, DbContext, servicii, DTO-uri și migrații, dacă migrațiile sunt regenerate.
-- [x] Redenumește `Rols` în `Role` sau `UserRole`.
-- [x] Adaugă explicit proprietățile de navigare și cheile străine:
-  - [x] `Workout.User` și `Workout.UserId`.
-  - [x] `Exercise.Workout` și `Exercise.WorkoutId`.
-  - [x] `Set.Exercise` și `Set.ExerciseId`.
-  - [x] `RefreshToken.User` și `RefreshToken.UserId`.
-- [x] Configurează relațiile, câmpurile obligatorii, lungimile maxime și regulile de ștergere în `OnModelCreating`.
-- [x] Adaugă index unic pentru email-ul normalizat al utilizatorului.
-- [x] Decide dacă exercițiile aparțin unui singur workout sau sunt reutilizabile între workout-uri și modelează relația corespunzător. Decizie: fiecare exercițiu aparține unui singur workout.
-- [x] Repară istoricul migrațiilor:
-  - [x] Elimină modificările duplicate prin înlocuirea istoricului vechi cu un baseline curat.
-  - [x] Include migrația finală `InitialCreate` în Git.
-  - [x] Regenerează migrațiile după confirmarea că baza locală nu conține date importante.
-- [x] Aplică migrațiile pe o bază SQLite nouă, goală.
-- [x] Verifică `dotnet ef migrations list` și `dotnet build`.
+workout-uri și modelează relația corespunzător.
+
+- [ ] Repară istoricul migrațiilor:
+  - [ ] Elimină modificările duplicate din `AddRefreshTokens` față de `UpdateWorkoutAndExerciseModel`.
+  - [ ] Asigură-te că migrația `UpdateWorkoutAndExerciseModel` este inclusă în Git.
+  - [ ] Regenerază migrațiile dacă baza locală poate fi recreată fără pierdere de date importante.
+- [ ] Aplică migrațiile pe o bază SQLite nouă, goală.
+- [ ] Verifică `dotnet ef migrations list` și `dotnet build`.
 
 ## P1 - Contractele din Application
 

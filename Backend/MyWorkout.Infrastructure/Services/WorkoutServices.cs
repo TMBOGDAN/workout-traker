@@ -51,19 +51,42 @@ public class WorkoutServices
         return true;
     }
 
-    public async Task<Workout?> ModifyWorkoutExercises(int workoutId, List<Exercise> exercises)
+    public async Task<Workout?> ModifyWorkoutExercises(int workoutId, List<int> exerciseIds)
     {
-        var workout = await _dbContext.Workouts.Include(w => w.Exercises)
-    .FirstOrDefaultAsync(w => w.Id == workoutId);
+        var workout = await _dbContext.Workouts
+            .Include(workout => workout.WorkoutExercises)
+            .FirstOrDefaultAsync(workout => workout.Id == workoutId);
 
         if (workout is null)
             return null;
 
-        workout.Exercises.Clear();
+        var distinctExerciseIds = exerciseIds.Distinct().ToList();
+        var existingExerciseIds = await _dbContext.Exercises
+            .Where(exercise => distinctExerciseIds.Contains(exercise.Id))
+            .Select(exercise => exercise.Id)
+            .ToListAsync();
 
-        foreach (var exercise in exercises)
+        if (existingExerciseIds.Count != distinctExerciseIds.Count)
         {
-            workout.Exercises.Add(exercise);
+            return null;
+        }
+
+        var workoutExercisesToRemove = workout.WorkoutExercises
+            .Where(workoutExercise => !distinctExerciseIds.Contains(workoutExercise.ExerciseId))
+            .ToList();
+
+        _dbContext.WorkoutExercises.RemoveRange(workoutExercisesToRemove);
+
+        var currentExerciseIds = workout.WorkoutExercises
+            .Select(workoutExercise => workoutExercise.ExerciseId)
+            .ToHashSet();
+
+        foreach (var exerciseId in distinctExerciseIds.Where(id => !currentExerciseIds.Contains(id)))
+        {
+            workout.WorkoutExercises.Add(new WorkoutExercise
+            {
+                ExerciseId = exerciseId
+            });
         }
 
         await _dbContext.SaveChangesAsync();

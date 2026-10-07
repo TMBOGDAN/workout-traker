@@ -13,12 +13,11 @@ public class ExerciseService
         _dbContext = dbContext;
     }
 
-    public async Task<Exercise?> CreateExercise(int workoutId, string name)
+    public async Task<Exercise?> CreateExercise(string name, int? createdByUserId = null)
     {
-        name = name.Trim().ToUpperInvariant();
+        name = name.Trim();
         var exercise = await _dbContext.Exercises
-            .FirstOrDefaultAsync(existingExercise =>
-                existingExercise.WorkoutId == workoutId && existingExercise.Name == name);
+            .FirstOrDefaultAsync(existingExercise => existingExercise.Name == name);
 
         if (exercise is not null)
         {
@@ -28,7 +27,7 @@ public class ExerciseService
         var newExercise = new Exercise
         {
             Name = name,
-            WorkoutId = workoutId
+            CreatedByUserId = createdByUserId
         };
 
         _dbContext.Exercises.Add(newExercise);
@@ -55,9 +54,11 @@ public class ExerciseService
 
     public async Task<bool> DeleteExercise(int exerciseId)
     {
-        var exercise = await _dbContext.Exercises.FindAsync(exerciseId);
+        var exercise = await _dbContext.Exercises
+            .FirstOrDefaultAsync(item => item.Id == exerciseId);
 
-        if (exercise is null)
+        if (exercise is null || await _dbContext.WorkoutExercises
+                .AnyAsync(workoutExercise => workoutExercise.ExerciseId == exerciseId))
         {
             return false;
         }

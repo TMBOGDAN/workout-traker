@@ -5,14 +5,13 @@ namespace MyWorkout.Domain.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public int WorkoutId { get; set; }
-        public Workout Workout { get; set; } = null!;
-        public List<Set> Sets { get; set; } = new List<Set>();
+        public int? CreatedByUserId { get; set; }
+        public User? CreatedByUser { get; set; }
+        public List<WorkoutExercise> WorkoutExercises { get; set; } = [];
 
-        public Exercise(string name, List<Set> sets)
+        public Exercise(string name)
         {
             Name = name;
-            Sets = sets;
         }
 
         public Exercise()

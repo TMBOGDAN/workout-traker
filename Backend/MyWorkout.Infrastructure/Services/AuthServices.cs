@@ -16,9 +16,7 @@ public class AuthServices
     private readonly MyWorkoutDbContext _dbContext;
     private readonly IConfiguration _configuration;
 
-    public AuthServices(
-        MyWorkoutDbContext dbContext,
-        IConfiguration configuration)
+    public AuthServices(MyWorkoutDbContext dbContext, IConfiguration configuration)
     {
         _dbContext = dbContext;
         _configuration = configuration;
@@ -28,18 +26,16 @@ public class AuthServices
     {
 
 
-        var normalizedEmail = User.NormalizeEmail(loginDto.Email);
+        var email = loginDto.Email.Trim();
         var user = await _dbContext.Users.AsNoTracking()
-            .FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail);
+            .FirstOrDefaultAsync(u => u.Email == email);
 
         if (user is null)
         {
             return null;
         }
 
-        var passwordIsValid = BCrypt.Net.BCrypt.Verify(
-            loginDto.Password,
-            user.PasswordHash);
+        var passwordIsValid = BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash);
 
         if (!passwordIsValid)
         {
@@ -69,11 +65,10 @@ public class AuthServices
 
     public async Task<bool> RegisterServices(AccountDto accountDto)
     {
-        var email = accountDto.Email.Trim().ToLowerInvariant();
-        var normalizedEmail = User.NormalizeEmail(email);
+        var email = accountDto.Email.Trim();
 
         var userExists = await _dbContext.Users
-            .AnyAsync(user => user.NormalizedEmail == normalizedEmail);
+            .AnyAsync(user => user.Email == email);
 
         if (userExists)
         {

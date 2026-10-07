@@ -5,8 +5,8 @@ namespace MyWorkout.Domain.Entities
         public int Id { get; set; }
         public int Reps { get; set; }
         public decimal Weight { get; set; }
-        public int ExerciseId { get; set; }
-        public Exercise Exercise { get; set; } = null!;
+        public int WorkoutExerciseId { get; set; }
+        public WorkoutExercise WorkoutExercise { get; set; } = null!;
 
         public Set(int reps, decimal weight)
         {

@@ -12,6 +12,7 @@ public class MyWorkoutDbContext : DbContext
     public DbSet<User> Users => Set<User>();
     public DbSet<Workout> Workouts => Set<Workout>();
     public DbSet<Exercise> Exercises => Set<Exercise>();
+    public DbSet<WorkoutExercise> WorkoutExercises => Set<WorkoutExercise>();
     public DbSet<Set> Sets => Set<Set>();
 
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
@@ -28,15 +29,12 @@ public class MyWorkoutDbContext : DbContext
             entity.Property(user => user.Email)
                 .IsRequired()
                 .HasMaxLength(254);
-            entity.Property(user => user.NormalizedEmail)
-                .IsRequired()
-                .HasMaxLength(254);
             entity.Property(user => user.PasswordHash)
                 .IsRequired()
                 .HasMaxLength(255);
             entity.Property(user => user.Role)
                 .IsRequired();
-            entity.HasIndex(user => user.NormalizedEmail)
+            entity.HasIndex(user => user.Email)
                 .IsUnique();
         });
 
@@ -59,10 +57,31 @@ public class MyWorkoutDbContext : DbContext
             entity.Property(exercise => exercise.Name)
                 .IsRequired()
                 .HasMaxLength(120);
-            entity.HasOne(exercise => exercise.Workout)
-                .WithMany(workout => workout.Exercises)
-                .HasForeignKey(exercise => exercise.WorkoutId)
+            entity.HasIndex(exercise => exercise.Name)
+                .IsUnique();
+            entity.HasOne(exercise => exercise.CreatedByUser)
+                .WithMany(user => user.CreatedExercises)
+                .HasForeignKey(exercise => exercise.CreatedByUserId)
+                .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        modelBuilder.Entity<WorkoutExercise>(entity =>
+        {
+            entity.HasIndex(workoutExercise => new
+                {
+                    workoutExercise.WorkoutId,
+                    workoutExercise.ExerciseId
+                })
+                .IsUnique();
+            entity.HasOne(workoutExercise => workoutExercise.Workout)
+                .WithMany(workout => workout.WorkoutExercises)
+                .HasForeignKey(workoutExercise => workoutExercise.WorkoutId)
                 .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired();
+            entity.HasOne(workoutExercise => workoutExercise.Exercise)
+                .WithMany(exercise => exercise.WorkoutExercises)
+                .HasForeignKey(workoutExercise => workoutExercise.ExerciseId)
+                .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
         });
 
@@ -70,9 +89,9 @@ public class MyWorkoutDbContext : DbContext
         {
             entity.Property(set => set.Weight)
                 .HasPrecision(10, 2);
-            entity.HasOne(set => set.Exercise)
-                .WithMany(exercise => exercise.Sets)
-                .HasForeignKey(set => set.ExerciseId)
+            entity.HasOne(set => set.WorkoutExercise)
+                .WithMany(workoutExercise => workoutExercise.Sets)
+                .HasForeignKey(set => set.WorkoutExerciseId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();
         });

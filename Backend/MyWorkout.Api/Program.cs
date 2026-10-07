@@ -75,7 +75,6 @@ static async Task SeedDevelopmentUsersAsync(MyWorkoutDbContext dbContext)
 
         user.Name = developmentUser.Name;
         user.Email = developmentUser.Email;
-        user.NormalizedEmail = User.NormalizeEmail(developmentUser.Email);
         user.PasswordHash = BCrypt.Net.BCrypt.HashPassword("123");
         user.Role = developmentUser.Role;
     }

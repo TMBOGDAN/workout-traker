@@ -10,7 +10,7 @@ namespace MyWorkout.Domain.Entities
         public int UserId { get; set; }
         public User User { get; set; } = null!;
 
-        public List<Exercise> Exercises { get; set; } = [];
+        public List<WorkoutExercise> WorkoutExercises { get; set; } = [];
 
         public Workout()
         {
