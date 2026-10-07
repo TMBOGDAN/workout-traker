@@ -28,7 +28,9 @@ public class AuthServices
     {
 
 
-        var user = await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == loginDto.Email);
+        var normalizedEmail = User.NormalizeEmail(loginDto.Email);
+        var user = await _dbContext.Users.AsNoTracking()
+            .FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail);
 
         if (user is null)
         {
@@ -68,9 +70,10 @@ public class AuthServices
     public async Task<bool> RegisterServices(AccountDto accountDto)
     {
         var email = accountDto.Email.Trim().ToLowerInvariant();
+        var normalizedEmail = User.NormalizeEmail(email);
 
         var userExists = await _dbContext.Users
-            .AnyAsync(user => user.Email == email);
+            .AnyAsync(user => user.NormalizedEmail == normalizedEmail);
 
         if (userExists)
         {
@@ -80,7 +83,7 @@ public class AuthServices
         var passwordHash = BCrypt.Net.BCrypt.HashPassword(
             accountDto.Password);
 
-        var newUser = new User(accountDto.Username.Trim(), accountDto.Email, passwordHash, Rols.User);
+        var newUser = new User(accountDto.Username.Trim(), email, passwordHash, UserRole.User);
 
         _dbContext.Users.Add(newUser);
         await _dbContext.SaveChangesAsync();
@@ -99,7 +102,7 @@ public class AuthServices
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim(ClaimTypes.Name, user.Name),
-            new Claim(ClaimTypes.Role, user.Rol.ToString())
+            new Claim(ClaimTypes.Role, user.Role.ToString())
         };
 
         var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));

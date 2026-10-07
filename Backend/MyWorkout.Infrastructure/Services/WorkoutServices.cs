@@ -51,7 +51,7 @@ public class WorkoutServices
         return true;
     }
 
-    public async Task<Workout?> ModofyWorkoutExercies(int workoutId, List<Excercise> exercises)
+    public async Task<Workout?> ModifyWorkoutExercises(int workoutId, List<Exercise> exercises)
     {
         var workout = await _dbContext.Workouts.Include(w => w.Exercises)
     .FirstOrDefaultAsync(w => w.Id == workoutId);

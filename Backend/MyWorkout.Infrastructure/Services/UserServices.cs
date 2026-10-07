@@ -17,9 +17,9 @@ namespace MyWorkout.Infrastructure.Services
             _dbContext = dbContext;
         }
 
-        async Task<User?> CreateUser(string name, string email, string password, Rols rol)
+        async Task<User?> CreateUser(string name, string email, string password, UserRole role)
         {
-            User newUser = new User(name, email, password, rol);
+            User newUser = new User(name, email, password, role);
             var user = _dbContext.Users.FirstOrDefault(w => w.Email == newUser.Email);
             if (user is null)
             {

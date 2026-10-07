@@ -8,8 +8,9 @@ namespace MyWorkout.Domain.Entities
         public string? Notes { get; set; }
 
         public int UserId { get; set; }
+        public User User { get; set; } = null!;
 
-        public List<Excercise> Exercises { get; set; } = [];
+        public List<Exercise> Exercises { get; set; } = [];
 
         public Workout()
         {
