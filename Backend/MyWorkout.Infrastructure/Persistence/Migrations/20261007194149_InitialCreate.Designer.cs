@@ -11,8 +11,8 @@ using MyWorkout.Infrastructure.Persistence;
 namespace MyWorkout.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(MyWorkoutDbContext))]
-    [Migration("20261007071827_AddRefreshTokens")]
-    partial class AddRefreshTokens
+    [Migration("20261007194149_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,7 +20,7 @@ namespace MyWorkout.Infrastructure.Persistence.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.12");
 
-            modelBuilder.Entity("MyWorkout.Domain.Entities.Excercise", b =>
+            modelBuilder.Entity("MyWorkout.Domain.Entities.Exercise", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -28,16 +28,17 @@ namespace MyWorkout.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(120)
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("WorkoutId")
+                    b.Property<int>("WorkoutId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("WorkoutId");
 
-                    b.ToTable("Excercises");
+                    b.ToTable("Exercises");
                 });
 
             modelBuilder.Entity("MyWorkout.Domain.Entities.RefreshToken", b =>
@@ -57,12 +58,16 @@ namespace MyWorkout.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("TokenHash")
                         .IsRequired()
+                        .HasMaxLength(64)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TokenHash")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -75,18 +80,19 @@ namespace MyWorkout.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ExcerciseId")
+                    b.Property<int>("ExerciseId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Reps")
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("Weight")
+                        .HasPrecision(10, 2)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ExcerciseId");
+                    b.HasIndex("ExerciseId");
 
                     b.ToTable("Sets");
                 });
@@ -99,20 +105,31 @@ namespace MyWorkout.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
+                        .HasMaxLength(254)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedEmail")
+                        .IsRequired()
+                        .HasMaxLength(254)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
+                        .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Rol")
+                    b.Property<int>("Role")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
@@ -125,9 +142,11 @@ namespace MyWorkout.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(120)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Notes")
+                        .HasMaxLength(1000)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("UserId")
@@ -140,11 +159,15 @@ namespace MyWorkout.Infrastructure.Persistence.Migrations
                     b.ToTable("Workouts");
                 });
 
-            modelBuilder.Entity("MyWorkout.Domain.Entities.Excercise", b =>
+            modelBuilder.Entity("MyWorkout.Domain.Entities.Exercise", b =>
                 {
-                    b.HasOne("MyWorkout.Domain.Entities.Workout", null)
+                    b.HasOne("MyWorkout.Domain.Entities.Workout", "Workout")
                         .WithMany("Exercises")
-                        .HasForeignKey("WorkoutId");
+                        .HasForeignKey("WorkoutId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Workout");
                 });
 
             modelBuilder.Entity("MyWorkout.Domain.Entities.RefreshToken", b =>
@@ -160,21 +183,27 @@ namespace MyWorkout.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("MyWorkout.Domain.Entities.Set", b =>
                 {
-                    b.HasOne("MyWorkout.Domain.Entities.Excercise", null)
+                    b.HasOne("MyWorkout.Domain.Entities.Exercise", "Exercise")
                         .WithMany("Sets")
-                        .HasForeignKey("ExcerciseId");
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exercise");
                 });
 
             modelBuilder.Entity("MyWorkout.Domain.Entities.Workout", b =>
                 {
-                    b.HasOne("MyWorkout.Domain.Entities.User", null)
+                    b.HasOne("MyWorkout.Domain.Entities.User", "User")
                         .WithMany("Workouts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MyWorkout.Domain.Entities.Excercise", b =>
+            modelBuilder.Entity("MyWorkout.Domain.Entities.Exercise", b =>
                 {
                     b.Navigation("Sets");
                 });
