@@ -15,8 +15,11 @@ namespace MyWorkout.Application.DTOs
 
     public class AccountResponseDto
     {
-        public string Token { get; set; } = null!;
+        public string AccessToken { get; set; } = string.Empty;
 
+        public string RefreshToken { get; set; } = string.Empty;
+
+        public DateTime AccessTokenExpiresAtUtc { get; set; }
     }
 
 

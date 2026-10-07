@@ -14,5 +14,5 @@ public class MyWorkoutDbContext : DbContext
     public DbSet<Excercise> Excercises => Set<Excercise>();
     public DbSet<Set> Sets => Set<Set>();
 
-
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 }

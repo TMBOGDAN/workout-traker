@@ -1,5 +1,7 @@
 using MyWorkout.Domain.Enums;
 
+
+
 namespace MyWorkout.Domain.Entities;
 
 public class User
@@ -12,7 +14,8 @@ public class User
 
     public List<Workout> Workouts { get; set; } = new();
 
-    // Folosit de EF Core când citește datele
+    public List<RefreshToken> RefreshTokens { get; set; } = new();
+
     private User()
     {
     }
@@ -32,4 +35,6 @@ public class User
         this.PasswordHash = user_p.PasswordHash;
         this.Rol = user_p.Rol;
     }
+
+
 }
