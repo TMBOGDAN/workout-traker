@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MyWorkout.Application.DTOs;
+using MyWorkout.Application.Interfaces;
 using MyWorkout.Infrastructure.Persistence;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -11,7 +12,7 @@ using System.Security.Cryptography;
 using MyWorkout.Domain.Enums;
 namespace MyWorkout.Infrastructure.Services;
 
-public class AuthServices
+public class AuthServices : IAuthService
 {
     private readonly MyWorkoutDbContext _dbContext;
     private readonly IConfiguration _configuration;
@@ -22,13 +23,15 @@ public class AuthServices
         _configuration = configuration;
     }
 
-    public async Task<AccountResponseDto?> LoginService(LoginDto loginDto)
+    public async Task<AccountResponseDto?> LoginAsync(
+        LoginDto loginDto,
+        CancellationToken cancellationToken = default)
     {
 
 
         var email = loginDto.Email.Trim();
         var user = await _dbContext.Users.AsNoTracking()
-            .FirstOrDefaultAsync(u => u.Email == email);
+            .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
 
         if (user is null)
         {
@@ -53,7 +56,7 @@ public class AuthServices
             CreatedAtUtc = now,
             ExpiresAtUtc = now.AddDays(30)
         });
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         return new AccountResponseDto
         {
@@ -63,12 +66,14 @@ public class AuthServices
         };
     }
 
-    public async Task<bool> RegisterServices(AccountDto accountDto)
+    public async Task<bool> RegisterAsync(
+        AccountDto accountDto,
+        CancellationToken cancellationToken = default)
     {
         var email = accountDto.Email.Trim();
 
         var userExists = await _dbContext.Users
-            .AnyAsync(user => user.Email == email);
+            .AnyAsync(user => user.Email == email, cancellationToken);
 
         if (userExists)
         {
@@ -81,7 +86,7 @@ public class AuthServices
         var newUser = new User(accountDto.Username.Trim(), email, passwordHash, UserRole.User);
 
         _dbContext.Users.Add(newUser);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         return true;
     }

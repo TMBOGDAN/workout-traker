@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MyWorkout.Application.Interfaces;
 using MyWorkout.Domain.Entities;
 using MyWorkout.Domain.Enums;
 using MyWorkout.Infrastructure.Persistence;
@@ -28,6 +29,7 @@ builder.Services.AddDbContext<MyWorkoutDbContext>(options =>
 });
 
 builder.Services.AddScoped<WorkoutServices>();
+builder.Services.AddScoped<IAuthService, AuthServices>();
 
 var app = builder.Build();
 

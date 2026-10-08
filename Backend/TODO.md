@@ -19,9 +19,9 @@ Lista este ordonată după prioritate și dependențe. Nu începe etapa următoa
 
 ## P1 - Contractele din Application
 
-- [ ] Creează folderul `Interfaces` în proiectul Application.
+- [x] Creează folderul `Interfaces` în proiectul Application.
 - [ ] Definește interfețele:
-  - [ ] `IAuthService`.
+  - [x] `IAuthService`.
   - [ ] `IWorkoutService`.
   - [ ] `IExerciseService`.
   - [ ] `IUserService`, numai dacă există operații reale de profil/administrare.
