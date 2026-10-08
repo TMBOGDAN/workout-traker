@@ -4,14 +4,18 @@ Lista este ordonată după prioritate și dependențe. Nu începe etapa următoa
 
 ## P0 - Repararea modelelor și a migrațiilor EF Core
 
-workout-uri și modelează relația corespunzător.
-
-- [ ] Repară istoricul migrațiilor:
-  - [ ] Elimină modificările duplicate din `AddRefreshTokens` față de `UpdateWorkoutAndExerciseModel`.
-  - [ ] Asigură-te că migrația `UpdateWorkoutAndExerciseModel` este inclusă în Git.
-  - [ ] Regenerază migrațiile dacă baza locală poate fi recreată fără pierdere de date importante.
-- [ ] Aplică migrațiile pe o bază SQLite nouă, goală.
-- [ ] Verifică `dotnet ef migrations list` și `dotnet build`.
+- [x] Păstrează workout-urile personale prin relația obligatorie `Workout.UserId`.
+- [x] Modelează exercițiile ca un catalog public, independent de workout-uri.
+- [x] Păstrează opțional creatorul unui exercițiu prin `Exercise.CreatedByUserId`.
+- [x] Leagă exercițiile de workout-uri prin entitatea `WorkoutExercise`.
+- [x] Leagă seturile de `WorkoutExercise`, astfel încât fiecare workout să aibă propriile seturi.
+- [x] Configurează relațiile, indexurile și regulile de ștergere în `OnModelCreating`.
+- [x] Repară istoricul migrațiilor:
+  - [x] Elimină migrațiile duplicate `AddRefreshTokens` și `UpdateWorkoutAndExerciseModel`.
+  - [x] Înlocuiește istoricul duplicat cu migrația curată `InitialCreate`.
+  - [x] Include în Git migrațiile `InitialCreate` și `AddPublicExerciseCatalog`.
+- [x] Aplică toate migrațiile pe o bază SQLite nouă, goală.
+- [x] Verifică `dotnet ef migrations list`, diferențele modelului și `dotnet build`.
 
 ## P1 - Contractele din Application
 
@@ -39,7 +43,7 @@ workout-uri și modelează relația corespunzător.
 - [ ] Fă fiecare serviciu să implementeze interfața corespunzătoare.
 - [ ] Înregistrează în DI toate serviciile ca `Scoped`.
 - [ ] Repară `AuthServices`:
-  - [ ] Normalizează și salvează email-ul normalizat la înregistrare.
+  - [ ] Aplică doar `Trim()` email-ului la register și login, fără schimbarea literelor mari/mici.
   - [ ] Păstrează verificarea parolei cu BCrypt.
   - [ ] Mută configurarea JWT într-o clasă de opțiuni validată.
   - [ ] Implementează refresh token rotation și revocarea token-urilor.
