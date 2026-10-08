@@ -1,27 +1,8 @@
-# Backend TODO
-
-Lista este ordonată după prioritate și dependențe. Nu începe etapa următoare până când proiectul compilează și etapa curentă este verificată.
-
-## P0 - Repararea modelelor și a migrațiilor EF Core
-
-- [x] Păstrează workout-urile personale prin relația obligatorie `Workout.UserId`.
-- [x] Modelează exercițiile ca un catalog public, independent de workout-uri.
-- [x] Păstrează opțional creatorul unui exercițiu prin `Exercise.CreatedByUserId`.
-- [x] Leagă exercițiile de workout-uri prin entitatea `WorkoutExercise`.
-- [x] Leagă seturile de `WorkoutExercise`, astfel încât fiecare workout să aibă propriile seturi.
-- [x] Configurează relațiile, indexurile și regulile de ștergere în `OnModelCreating`.
-- [x] Repară istoricul migrațiilor:
-  - [x] Elimină migrațiile duplicate `AddRefreshTokens` și `UpdateWorkoutAndExerciseModel`.
-  - [x] Înlocuiește istoricul duplicat cu migrația curată `InitialCreate`.
-  - [x] Include în Git migrațiile `InitialCreate` și `AddPublicExerciseCatalog`.
-- [x] Aplică toate migrațiile pe o bază SQLite nouă, goală.
-- [x] Verifică `dotnet ef migrations list`, diferențele modelului și `dotnet build`.
-
 ## P1 - Contractele din Application
 
-- [x] Creează folderul `Interfaces` în proiectul Application.
+- [ ] Creează folderul `Interfaces` în proiectul Application.
 - [ ] Definește interfețele:
-  - [x] `IAuthService`.
+  - [ ] `IAuthService`.
   - [ ] `IWorkoutService`.
   - [ ] `IExerciseService`.
   - [ ] `IUserService`, numai dacă există operații reale de profil/administrare.
